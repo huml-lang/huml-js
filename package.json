@@ -1,0 +1,26 @@
+{
+    "name": "@huml-lang/huml",
+    "author": "Kailash Nadh",
+    "homepage": "https://huml.io",
+    "license": "MIT",
+    "version": "0.1.0",
+    "description": "A parser and stringifier for the HUML (Human-oriented Markup Language) format.",
+    "files": [
+        "*.js"
+    ],
+    "main": "index.js",
+    "module": "index.js",
+    "type": "module",
+    "exports": {
+        ".": {
+            "import": "./index.js",
+            "require": "./index.js"
+        }
+    },
+    "scripts": {
+        "test": "node --test *_tests.js"
+    },
+    "keywords": [
+        "huml"
+    ]
+}
