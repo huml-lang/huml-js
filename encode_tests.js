@@ -11,11 +11,10 @@ test('TestEncodeDoc', () => {
     const resHuml = huml.parse(humlContent);
 
     // Marshal it back to HUML.
-    const marshalled = stringify(resHuml);
-
+    const encoded = stringify(resHuml);
 
     // Read it again using the HUML parser.
-    const resHumlConverted = huml.parse(marshalled);
+    const resHumlConverted = huml.parse(encoded);
     const out = normalizeToJSON(resHumlConverted);
 
     // Read test.json and parse it.
