@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import path from 'node:path';
-import { parse } from './huml.js';
+import { parse } from './decode.js';
 
 test('Assertions', async (t) => {
   const runAssertion = async (name, input, errorExpected) => {

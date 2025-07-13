@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import { strict as assert } from 'node:assert';
 import { readFileSync } from 'node:fs';
 import { stringify } from './encode.js';
-import huml from './huml.js';
+import huml from './decode.js';
 
 
 test('TestEncodeDoc', () => {

@@ -1,13 +1,10 @@
 // Regular expression to validate bare keys (no quotes needed).
 const BARE_KEY_REGEX = /^[a-zA-Z][a-zA-Z0-9_-]*$/;
 
-// Convert a JS object to HUML format..
-export function stringify(value) {
-  const lines = ['%HUML v0.1.0'];
-  toValue(value, 0, lines, true);
-  lines.push(''); // Ensure document ends with newline.
-  return lines.join('\n');
-}
+const CFG = {
+  // Include the version header?
+  includeVersion: false,
+};
 
 // Encde a value to HUML format.
 function toValue(value, indent, lines, isRootLevel = false) {
@@ -151,4 +148,19 @@ function isEmptyVector(value) {
 // Quotes a key if necessary.
 function quoteKey(key) {
   return BARE_KEY_REGEX.test(key) ? key : JSON.stringify(key);
+}
+
+// Convert a JS object to HUML format.
+export function stringify(obj, cfg) {
+  const lines = [];
+  
+  if (cfg && cfg.includeVersion) {
+    lines.push('%HUML v0.1.0');
+    lines.push('');
+  }
+  
+  toValue(obj, 0, lines, true);
+  lines.push(''); // Ensure document ends with newline.
+
+  return lines.join('\n');
 }
