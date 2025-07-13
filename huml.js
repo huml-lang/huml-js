@@ -806,11 +806,16 @@ class Parser {
     }
 
     hasInlineDict() {
-        return Array.from(this.data.slice(this.pos)).some((char, i) => {
-            const actualPos = this.pos + i;
-            if (['\n', '#'].includes(char)) return false;
-            return char === ':' && (actualPos + 1 >= this.data.length || this.data[actualPos + 1] !== ':');
-        });
+        let pos = this.pos;
+        while (pos < this.data.length && this.data[pos] !== '\n' && this.data[pos] !== '#') {
+            if (this.data[pos] === ':') {
+                if (pos + 1 >= this.data.length || this.data[pos + 1] !== ':') {
+                    return true;
+                }
+            }
+            pos++;
+        }
+        return false;
     }
 
     hasInlineListAtRoot() {
