@@ -76,13 +76,10 @@ function toArray(arr, indent, lines, isRootLevel = false) {
   const itemIndent = isRootLevel ? 0 : indent;
 
   arr.forEach((item, i) => {
-    if (i > 0 || !isRootLevel) lines.push('');
-    
     lines.push(' '.repeat(itemIndent) + '- ');
     
     if (isVector(item)) {
       lines[lines.length - 1] += '::';
-      lines.push(''); // Add newline after :: for vectors in lists.
       toValue(item, itemIndent + 2, lines);
     } else {
       toValue(item, itemIndent, lines);
@@ -106,8 +103,6 @@ function toObject(obj, indent, lines, isRootLevel = false) {
   const keyIndent = isRootLevel ? 0 : indent;
 
   entries.forEach(([key, value], i) => {
-    if (i > 0 || !isRootLevel) lines.push('');
-    
     writeKeyValuePair(key, value, keyIndent, lines);
   });
 }
@@ -121,7 +116,6 @@ function writeKeyValuePair(key, value, indent, lines) {
   
   if (isVec) {
     lines[lines.length - 1] += isEmpty ? ':: ' : '::';
-    if (!isEmpty) lines.push('');
   } else {
     lines[lines.length - 1] += ': ';
   }
