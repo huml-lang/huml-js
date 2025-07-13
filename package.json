@@ -18,7 +18,8 @@
         }
     },
     "scripts": {
-        "test": "node --test *_tests.js"
+        "test": "node --test *_tests.js",
+        "build": "bun build ./index.js --outfile=dist/huml.min.js --minify --target=browser"
     },
     "keywords": [
         "huml"
