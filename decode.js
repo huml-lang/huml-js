@@ -43,8 +43,8 @@ const ESCAPE_MAP = {
     'n': '\n',
     't': '\t',
     'r': '\r',
-    'b': '\b',
-    'f': '\f'
+    'f': '\f',
+    'v': '\v'
 };
 
 const NUMBER_BASE_PREFIXES = [
@@ -505,18 +505,6 @@ class Parser {
 
                 if (ESCAPE_MAP.hasOwnProperty(esc)) {
                     result += ESCAPE_MAP[esc];
-                } else if (esc === 'u') {
-                    // Unicode escape.
-                    if (this.pos + 4 >= this.data.length) {
-                        throw this.error('incomplete unicode escape sequence \\u');
-                    }
-                    const hex = this.data.substring(this.pos + 1, this.pos + 5);
-                    const code = parseInt(hex, 16);
-                    if (isNaN(code)) {
-                        throw this.error(`invalid unicode escape sequence \\u${hex}`);
-                    }
-                    result += String.fromCharCode(code);
-                    this.advance(4);
                 } else {
                     throw this.error(`invalid escape character '\\${esc}'`);
                 }
