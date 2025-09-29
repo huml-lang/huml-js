@@ -1,14 +1,14 @@
 /**
  * This package provides a parser for HUML (Human Markup Language),
  * a strict, human-readable data format.
- * 
+ *
  * HUML (Human Markup Language) enforces:
  * - Strict indentation (2 spaces)
  * - No trailing spaces
  * - Explicit type indicators (: for scalar, :: for vector)
  * - Clear multiline string delimiters (``` preserves spacing, """ strips)
  * - ALL strings must be quoted with double quotes
- * 
+ *
  * Key HUML concepts:
  * - [] and {} are ONLY for empty collections
  * - Inline lists: key:: "val1", "val2", 3, true (NO brackets)
@@ -358,6 +358,9 @@ class Parser {
                 this.advance(1);
                 this.assertSpace('in inline dict');
 
+                if (key in result) {
+                    throw this.error(`duplicate key '${key}' in dict`);
+                }
                 result[key] = this.parseValue(0);
             } else {
                 result.push(this.parseValue(0));

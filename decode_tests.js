@@ -8,15 +8,20 @@ import { parse } from './decode.js';
 test('Assertions', async (t) => {
   const runAssertion = async (name, input, errorExpected) => {
     await t.test(name, () => {
+      let failure = '';
       try {
         const result = parse(input);
         if (errorExpected) {
-          assert.fail('expected error but got none');
+          failure = 'expected error but got none';
         }
       } catch (err) {
         if (!errorExpected) {
-          assert.fail(`unexpected error: ${err.message}`);
+          failure = `unexpected error: ${err.message}`;
         }
+      }
+      if (failure !== '') {
+        // This throws, so don't call it in the catch above.
+        assert.fail(failure);
       }
     });
   };
