@@ -302,11 +302,10 @@ class Parser {
             this.consumeLine();
 
             const vecType = this.getMultilineVectorType(indent);
-            const nextIndent = this.getCurIndent();
 
             return vecType === 'list'
-                ? this.parseMultilineList(nextIndent)
-                : this.parseMultilineDict(nextIndent);
+                ? this.parseMultilineList(indent)
+                : this.parseMultilineDict(indent);
         }
 
         // Inline vector requires exactly one space after ::.
