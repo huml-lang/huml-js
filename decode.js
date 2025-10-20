@@ -389,6 +389,8 @@ class Parser {
 
         if (this.peekChar(this.pos) === '"') {
             return this.parseString();
+        } else if (!this.isKeyStart()) {
+            throw this.error(`invalid character '${this.data[this.pos]}', expected key`);
         }
 
         const start = this.pos;
