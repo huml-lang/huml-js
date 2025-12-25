@@ -6,15 +6,18 @@
     "version": "0.1.0",
     "description": "A parser and stringifier for the HUML (Human-oriented Markup Language) format.",
     "files": [
-        "*.js"
+        "*.js",
+        "*.d.ts"
     ],
     "main": "index.js",
+    "types": "index.d.ts",
     "module": "index.js",
     "type": "module",
     "exports": {
         ".": {
             "import": "./index.js",
-            "require": "./index.js"
+            "require": "./index.js",
+            "types": "./index.d.ts"
         }
     },
     "scripts": {
