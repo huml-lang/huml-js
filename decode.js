@@ -6,7 +6,7 @@
  * - Strict indentation (2 spaces)
  * - No trailing spaces
  * - Explicit type indicators (: for scalar, :: for vector)
- * - Clear multiline string delimiters (``` preserves spacing, """ strips)
+ * - Clear multiline string delimiters (""" preserves spacing)
  * - ALL strings must be quoted with double quotes
  *
  * Key HUML concepts:
@@ -89,8 +89,8 @@ class Parser {
 
                 if (this.pos > start) {
                     const version = this.data.substring(start, this.pos);
-                    if (version !== 'v0.1.0') {
-                        throw this.error(`unsupported version '${version}'. expected 'v0.1.0'`);
+                    if (version !== 'v0.2.0') {
+                        throw this.error(`unsupported version '${version}'. expected 'v0.2.0'`);
                     }
                 }
             }
@@ -219,7 +219,7 @@ class Parser {
                 this.assertSpace("after ':'");
 
                 // Check if multiline string before parsing (they consume their own newlines).
-                const isMultiline = this.peekString('```') || this.peekString('"""');
+                const isMultiline = this.peekString('"""');
 
                 val = this.parseValue(curIndent);
 
@@ -433,12 +433,8 @@ class Parser {
         // Strings MUST be quoted.
         if (c === '"') {
             return this.peekString('"""')
-                ? this.parseMultilineString(keyIndent, false)
+                ? this.parseMultilineString(keyIndent)
                 : this.parseString();
-        }
-
-        if (c === '`' && this.peekString('```')) {
-            return this.parseMultilineString(keyIndent, true);
         }
 
         for (const [str, value] of SPECIAL_VALUES) {
@@ -522,24 +518,21 @@ class Parser {
         throw this.error('unclosed string');
     }
 
-    // Parses multiline strings - ``` preserves spacing, """ strips whitespace.
-    parseMultilineString(keyIndent, preserveSpaces) {
+    // Parses """ (preserves preceding space) multiline strings.
+    parseMultilineString(keyIndent) {
         const delim = this.data.substring(this.pos, this.pos + 3);
         this.advance(3);
 
         this.consumeLine();
 
-        // Define line processing based on string type.
-        const processLine = preserveSpaces
-            ? (content, lineIndent) => {
-                // Strip required 2-space indent relative to key.
-                const reqIndent = keyIndent + 2;
-                if (content.length >= reqIndent && this.isSpaceString(content.substring(0, reqIndent))) {
-                    return content.substring(reqIndent);
-                }
-                return content;
+        // Strip the required 2-space indent relative to the key.
+        const processLine = (content, lineIndent) => {
+            const reqIndent = keyIndent + 2;
+            if (content.length >= reqIndent && this.isSpaceString(content.substring(0, reqIndent))) {
+                return content.substring(reqIndent);
             }
-            : (content) => content.trim(); // Strip all whitespace for """.
+            return content;
+        };
 
         const lines = [];
 

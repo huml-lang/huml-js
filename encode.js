@@ -14,7 +14,7 @@ function toValue(value, indent, lines, isRootLevel = false) {
   }
 
   const type = typeof value;
-  
+
   if (type === 'boolean') {
     lines[lines.length - 1] += String(value);
   } else if (type === 'number') {
@@ -45,20 +45,20 @@ function toString(str, indent, lines) {
     // Multi-line string.
     const keyIndent = indent - 2;
     const contentIndent = indent;
-    
-    lines[lines.length - 1] += '```';
+
+    lines[lines.length - 1] += '"""';
     const strLines = str.split('\n');
-    
+
     // Remove empty last line if string ends with newline.
     if (strLines[strLines.length - 1] === '') {
       strLines.pop();
     }
-    
+
     strLines.forEach(line => {
       lines.push(' '.repeat(contentIndent) + line);
     });
-    
-    lines.push(' '.repeat(keyIndent) + '```');
+
+    lines.push(' '.repeat(keyIndent) + '"""');
   } else {
     // Single-line string - use JSON.stringify for proper escaping.
     lines[lines.length - 1] += JSON.stringify(str);
@@ -77,7 +77,7 @@ function toArray(arr, indent, lines, isRootLevel = false) {
 
   arr.forEach((item, i) => {
     lines.push(' '.repeat(itemIndent) + '- ');
-    
+
     if (isVector(item)) {
       lines[lines.length - 1] += '::';
       toValue(item, itemIndent + 2, lines);
@@ -90,7 +90,7 @@ function toArray(arr, indent, lines, isRootLevel = false) {
 // Encode an object value.
 function toObject(obj, indent, lines, isRootLevel = false) {
   const entries = Object.entries(obj);
-  
+
   if (entries.length === 0) {
     lines[lines.length - 1] += '{}';
     return;
@@ -110,24 +110,22 @@ function toObject(obj, indent, lines, isRootLevel = false) {
 // Writes a key-value pair.
 function writeKeyValuePair(key, value, indent, lines) {
   lines.push(' '.repeat(indent) + quoteKey(key));
-  
+
   const isVec = isVector(value);
   const isEmpty = isEmptyVector(value);
-  
+
   if (isVec) {
     lines[lines.length - 1] += isEmpty ? ':: ' : '::';
   } else {
     lines[lines.length - 1] += ': ';
   }
-  
+
   toValue(value, indent + 2, lines);
 }
 
 // Determines if a value is a vector (array or object).
 function isVector(value) {
-  return value !== null && 
-         (Array.isArray(value) || 
-          (typeof value === 'object' && value.constructor === Object));
+  return value !== null && (Array.isArray(value) || (typeof value === 'object' && value.constructor === Object));
 }
 
 // Determines if a vector is empty.
@@ -147,12 +145,12 @@ function quoteKey(key) {
 // Convert a JS object to HUML format.
 export function stringify(obj, cfg) {
   const lines = [];
-  
+
   if (cfg && cfg.includeVersion) {
-    lines.push('%HUML v0.1.0');
+    lines.push('%HUML v0.2.0');
     lines.push('');
   }
-  
+
   toValue(obj, 0, lines, true);
   lines.push(''); // Ensure document ends with newline.
 
